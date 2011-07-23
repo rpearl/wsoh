@@ -11,7 +11,7 @@ data Prim = Plus
           | Minus
           | Div
           | Times
-          | Num Int 
+          | Num Int
 
 instance Binary LLProg where
   put (LLP fns expr) = do put fns
