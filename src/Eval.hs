@@ -53,3 +53,6 @@ step prog expr =
       cleanup $ App (subst es f) (drop n es)
       where (Fn n f) = getFun prog i
     App (Prim p) es -> stepPrim prog p es
+
+eval prog expr =
+  if isWHNF expr then expr else eval prog $ step prog expr
