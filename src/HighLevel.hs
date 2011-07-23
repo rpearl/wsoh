@@ -4,12 +4,12 @@ import LowLevel (Prim)
 
 data HLProg = HLP [DataType] Expr
 
-data DataType = DT [(String, [DataType])]
-              | Lit
+data DataType = DT String [String]
 
 type Var = String
-data Expr = Case [(String, Expr)]
+data Expr = Case [(String, (Int, Expr))]
           | Lambda [Var] [Expr]
           | Prim Prim
-          | App Expr Expr
+          | App [Expr]
           | Let Var Expr Expr
+          | Var Var
