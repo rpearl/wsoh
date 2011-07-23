@@ -2,7 +2,7 @@
 -- see
 -- http://www.haskell.org/cabal/release/cabal-latest/doc/users-guide/authors.html#pkg-descr.
 -- The name of the package.
-Name:                tyjs
+Name:                srvs
 
 -- The package version. See the Haskell package versioning policy
 -- (http://www.haskell.org/haskellwiki/Package_versioning_policy) for
@@ -47,7 +47,7 @@ Build-type:          Simple
 Cabal-version:       >=1.2
 
 
-Executable tyjs
-  Main-is: tyjs.hs
+Executable srvs
+  Main-is: srvs.hs
   Hs-Source-Dirs: src
-  Build-Depends: WebBits, base
+  Build-Depends: hs-twitter, base
