@@ -3,6 +3,7 @@ module Compile where
 import qualified HighLevel as HL
 import qualified LowLevel as LL
 import Data.List
+import Control.Monad.State
 
 composer :: (b -> a -> a) -> [b] -> a -> a
 composer f = foldr ((.) . f) id
@@ -11,7 +12,7 @@ mangle :: String -> String
 mangle = (' ' :)
 
 compile :: HL.HLProg -> LL.LLProg
-compile (HL.HLP dts e) = compileExpr $ composer compileDT dts e
+compile (HL.HLP dts e) = compileExprFull $ composer compileDT dts e
 
 compileDT :: HL.DataType -> HL.Expr -> HL.Expr
 compileDT (HL.DT arms) =
@@ -32,17 +33,20 @@ compileArm z (n, (name, l)) =
            where nms = nameMangle . show
          internal = map (nameMangle' . show) [1..l]
 
-compileExpr :: HL.Expr -> LL.LLProg
+type FnEmit = State [LL.Fn]
+
+compileExprFull :: HL.Expr -> LL.LLProg
+compileExprFull x =
+  let (e, s) = runState (compileExpr x) []
+  in LL.LLP (reverse s) e
+
+compileExpr :: HL.Expr -> FnEmit LL.Expr
 compileExpr (HL.Case e branches') =
    compileExpr (HL.App e (map snd $ sort branches'))
 compileExpr (HL.Lambda vars_ e_) = undefined
-compileExpr (HL.Prim p) = LL.LLP [] $ LL.Prim p
-compileExpr (HL.App e es) =
-  let (fns, e' : es') = mergeProg $ map compileExpr $ e : es
-  in LL.LLP fns $ LL.App e' es'
+compileExpr (HL.Prim p) = return $ LL.Prim p
+compileExpr (HL.App e es) = do
+   (e' : es') <- mapM compileExpr $ e : es
+   return $ LL.App e' es'
 compileExpr (HL.Let v b e) = compileExpr $ HL.App (HL.Lambda [v] e) [b]
 compileExpr (HL.Var var) = error "Unbound Variable"
-
-
-mergeProg :: [LL.LLProg] -> ([LL.Fn], [LL.Expr])
-mergeProg = undefined
