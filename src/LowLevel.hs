@@ -16,9 +16,13 @@ data Prim = Plus
           | Minus
           | Div
           | Times
+<<<<<<< HEAD
           | Num Int
           | Ifz
           deriving Show
+=======
+          | Num Int deriving (Ord, Eq)
+>>>>>>> 22d26df6c2887c39568d1e78e27091b738b26c78
 
 {-
 instance Binary LLProg where
