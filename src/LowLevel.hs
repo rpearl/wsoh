@@ -2,17 +2,25 @@ module LowLevel where
 
 import Data.Binary
 
+type Arity = Int
 data LLProg = LLP [Fn] Expr
-data Fn = Fn Int [Expr] Expr
+            deriving Show
+data Fn = Fn Int Expr
+        deriving Show
 data Expr = Var Int
           | App Expr [Expr]
           | Prim Prim
+          | Fun Arity Int
+          deriving Show
 data Prim = Plus
           | Minus
           | Div
           | Times
-          | Num Int 
+          | Num Int
+          | Ifz
+          deriving Show
 
+{-
 instance Binary LLProg where
   put (LLP fns expr) = do put fns
                           put expr
@@ -60,3 +68,4 @@ instance Binary Prim where
              3 -> return Times
              4 -> do n <- get
                      return $ Num n
+-}
