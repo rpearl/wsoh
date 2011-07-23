@@ -7,9 +7,9 @@ data HLProg = HLP [DataType] Expr
 data DataType = DT [(String, Int)]
 
 type Var = String
-data Expr = Case [(String, Expr)]
+data Expr = Case Expr [(String, Expr)]
           | Lambda [Var] Expr
           | Prim Prim
-          | App [Expr]
+          | App Expr [Expr]
           | Let Var Expr Expr
-          | Var Var
+          | Var Var deriving (Ord, Eq)
