@@ -50,4 +50,4 @@ Cabal-version:       >=1.2
 Executable srvs
   Main-is: srvs.hs
   Hs-Source-Dirs: src
-  Build-Depends: ghc-binary, hs-twitter, base >= 4.0
+  Build-Depends: ghc-binary, hs-twitter, base >= 4.0, mtl
